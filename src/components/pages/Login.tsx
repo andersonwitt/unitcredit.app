@@ -1,17 +1,27 @@
-import React from 'react';
-import {Button, View} from 'react-native';
-import {NavigationProps} from '../../Routes';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import React, {createContext, PropsWithChildren} from 'react';
+import {NavigationProps, RootStackParamList} from '../../Routes';
 import Container from '../templates/Container';
+import {LoginTemplate} from '../templates/LoginTemplate';
 
-const Login = ({navigation}: NavigationProps<'Login'>) => {
-  const onClick = () => navigation.navigate('Home');
+type NavigationLoginType = {
+  navigation?: NativeStackNavigationProp<RootStackParamList, 'Login'>;
+};
 
+export const NavigationContext = createContext<NavigationLoginType>({});
+
+const Login: React.FC<PropsWithChildren<NavigationLoginType>> = ({
+  navigation,
+}) => {
   return (
-    <Container>
-      <View>
-        <Button title="Login" onPress={onClick} />
-      </View>
-    </Container>
+    <NavigationContext.Provider
+      value={{
+        navigation,
+      }}>
+      <Container>
+        <LoginTemplate />
+      </Container>
+    </NavigationContext.Provider>
   );
 };
 

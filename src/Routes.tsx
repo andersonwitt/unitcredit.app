@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 export type RootStackParamList = {
   Login: undefined;
-  Home: {userId: string};
+  Home: undefined;
 };
 
 export type NavigationProps<T extends keyof RootStackParamList> =

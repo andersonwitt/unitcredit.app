@@ -10,7 +10,7 @@ const Container: React.FC<PropsWithChildren> = ({children}) => {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView testID='main-container' style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
@@ -19,12 +19,5 @@ const Container: React.FC<PropsWithChildren> = ({children}) => {
     </SafeAreaView>
   );
 };
-
-//const styles = StyleSheet.create({
-//  sectionContainer: {
-//    marginTop: 32,
-//    paddingHorizontal: 24,
-//  },
-//});
 
 export default Container;
