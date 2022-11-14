@@ -8,20 +8,20 @@ type NavigationLoginType = {
   navigation?: NativeStackNavigationProp<RootStackParamList, 'Login'>;
 };
 
-export const NavigationContext = createContext<NavigationLoginType>({});
+export const LoginNavigationContext = createContext<NavigationLoginType>({});
 
 const Login: React.FC<PropsWithChildren<NavigationLoginType>> = ({
   navigation,
 }) => {
   return (
-    <NavigationContext.Provider
+    <LoginNavigationContext.Provider
       value={{
         navigation,
       }}>
       <Container>
         <LoginTemplate />
       </Container>
-    </NavigationContext.Provider>
+    </LoginNavigationContext.Provider>
   );
 };
 

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {StyleSheet, TouchableHighlight, View} from 'react-native';
 import React from 'react';
 import {useTheme} from '../hooks/useTheme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

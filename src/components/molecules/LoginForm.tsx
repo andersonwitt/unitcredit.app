@@ -6,10 +6,11 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {NavigationContext} from '../pages/Login';
+import {LoginNavigationContext} from '../pages/Login';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../hooks/useTheme';
-import {signIn} from '../services/UserService';
+import {useUserService} from '../services/UserService';
+import {UserSessionContext} from '../../../App';
 
 type User = {
   userName: string;
@@ -17,8 +18,10 @@ type User = {
 };
 
 const LoginForm: React.FC = () => {
-  const {navigation} = useContext(NavigationContext);
+  const {navigation} = useContext(LoginNavigationContext);
+  const {setToken} = useContext(UserSessionContext);
   const {colors} = useTheme();
+  const {signIn} = useUserService();
   const [user, setUser] = useState<User>({
     password: '',
     userName: '',
@@ -30,7 +33,8 @@ const LoginForm: React.FC = () => {
         userName: user.userName,
         password: user.password,
       });
-      if (response.isAuthenticated) {
+      if (response.isAuthenticated && response.accessToken) {
+        setToken?.(response);
         navigation?.replace('Home');
       }
     } catch (e) {
