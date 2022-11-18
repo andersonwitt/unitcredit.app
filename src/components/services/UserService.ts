@@ -2,16 +2,16 @@ import {useContext} from 'react';
 import {UserSessionContext} from '../../../App';
 
 export enum EnumUserType {
-  ADMIN = 'ADMIN',
-  COMMERCE = 'COMMERCE',
-  TEACHER = 'TEACHER',
-  STUDENT = 'STUDENT',
+  ADMIN = 1,
+  COMMERCE = 2,
+  TEACHER = 3,
+  STUDENT = 4,
 }
 
 export type BaseType = {
-  id: string;
-  createAt: Date;
-  updateAt: Date;
+  id?: string;
+  createAt?: Date;
+  updateAt?: Date;
 };
 
 export type SignInRequest = {
@@ -21,11 +21,11 @@ export type SignInRequest = {
 };
 
 export type User = BaseType & {
-  name: string;
-  email: string;
-  studentId: string;
-  password: string;
-  balance: number;
+  name?: string;
+  email?: string;
+  studentId?: string;
+  password?: string;
+  balance?: number;
   type?: EnumUserType;
 };
 
@@ -37,12 +37,14 @@ export type SignInResult = {
 
 const useUserService = () => {
   const {token} = useContext(UserSessionContext);
+  //const apiURL = 'https://unitcreditapi.herokuapp.com';
+  const apiURL = 'http://10.0.0.120:5000';
 
   const signIn = async ({
     password,
     userName,
   }: SignInRequest): Promise<SignInResult> =>
-    fetch('https://unitcreditapi.herokuapp.com/api/Login', {
+    fetch(`${apiURL}/api/Login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -54,31 +56,27 @@ const useUserService = () => {
     }).then(response => response.json());
 
   const createUser = async (payload: User): Promise<User> =>
-    fetch('https://unitcreditapi.herokuapp.com/api/users', {
+    fetch(`${apiURL}/api/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token?.accessToken,
       },
-      body: JSON.stringify({
-        payload,
-      }),
+      body: JSON.stringify({...payload}),
     }).then(response => response.json());
 
   const updateUser = async (payload: User): Promise<User> =>
-    fetch('https://unitcreditapi.herokuapp.com/api/users', {
+    fetch(`${apiURL}/api/users`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token?.accessToken,
       },
-      body: JSON.stringify({
-        payload,
-      }),
+      body: JSON.stringify(payload),
     }).then(response => response.json());
 
   const removeUser = async (id: string): Promise<boolean> => {
-    return fetch(`https://unitcreditapi.herokuapp.com/api/users/${id}`, {
+    return fetch(`${apiURL}/api/users/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -88,7 +86,7 @@ const useUserService = () => {
   };
 
   const getUsers = async (): Promise<User[]> => {
-    return fetch(`https://unitcreditapi.herokuapp.com/api/users`, {
+    return fetch(`${apiURL}/api/users`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

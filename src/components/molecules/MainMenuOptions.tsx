@@ -48,7 +48,13 @@ const MainMenuOptions: React.FC<IMainMenuOptionsProps> = ({type}) => {
   const teacherOptions = (
     <View style={{...styles.card, backgroundColor: colors.contrast}}>
       <Icon name="hand-coin-outline" size={36} color={colors.primary} />
-      <Text style={{marginLeft: 20}}>Transferência de créditos</Text>
+      <Text
+        style={{marginLeft: 20}}
+        onPress={() => {
+          navigation?.navigate('Transfer');
+        }}>
+        Transferência de créditos
+      </Text>
     </View>
   );
 
