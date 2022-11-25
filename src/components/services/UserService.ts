@@ -33,6 +33,7 @@ export type SignInResult = {
   isAuthenticated: boolean;
   accessToken: string;
   userName: string;
+  userId: string;
 };
 
 const useUserService = () => {
@@ -95,7 +96,17 @@ const useUserService = () => {
     }).then(response => response.json());
   };
 
-  return {signIn, createUser, updateUser, removeUser, getUsers};
+  const getUser = async (userId: string): Promise<User> => {
+    return fetch(`${apiURL}/api/users/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token?.accessToken,
+      },
+    }).then(response => response.json());
+  };
+
+  return {signIn, createUser, updateUser, removeUser, getUsers, getUser};
 };
 
 export {useUserService};

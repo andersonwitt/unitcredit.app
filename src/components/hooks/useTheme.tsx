@@ -9,6 +9,7 @@ export type ThemeColors = {
   contrast: string;
   text: string;
   icon: string;
+  card: string;
 };
 
 const useTheme = () => {
@@ -20,6 +21,7 @@ const useTheme = () => {
     contrast: '#d1d1d1',
     icon: '#666666',
     text: theme === 'dark' ? '#fff' : '#666666',
+    card: '#EBEBEB',
   });
 
   useEffect(() => {
@@ -30,6 +32,7 @@ const useTheme = () => {
       contrast: '#d1d1d1',
       icon: '#d1d1d1',
       text: theme === 'dark' ? '#fff' : '#666666',
+      card: '#EBEBEB',
     });
   }, [theme, setColors]);
 

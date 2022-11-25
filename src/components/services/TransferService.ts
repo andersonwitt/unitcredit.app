@@ -7,6 +7,20 @@ export type TransferPayloadType = {
   toId?: string;
 };
 
+export enum EnumTransactionType {
+  CREDIT = 1,
+  SALEORPAYMENT = 2,
+  TRANSFER = 3,
+}
+
+export type Transaction = {
+  description?: string;
+  total?: number;
+  type?: EnumTransactionType;
+  fromId?: string;
+  toId?: string;
+};
+
 export type BaseResultType = {
   isValid: boolean;
   message: string;
@@ -30,7 +44,17 @@ const useTransferService = () => {
     }).then(response => response.json());
   };
 
-  return {transferToUser};
+  const getTransactionsByUserId = async (userId: string): Promise<Transaction[]> => {
+    return fetch(`${apiURL}/api/Transactions/User/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token?.accessToken,
+      },
+    }).then(response => response.json());
+  };
+
+  return {transferToUser, getTransactionsByUserId};
 };
 
 export {useTransferService};

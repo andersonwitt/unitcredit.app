@@ -14,6 +14,7 @@ const App = () => {
     accessToken: '',
     isAuthenticated: false,
     userName: '',
+    userId: '',
   });
 
   return (

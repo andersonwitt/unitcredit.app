@@ -10,7 +10,8 @@ import Login from './components/pages/Login';
 import Home from './components/pages/Home';
 import UsersList from './components/pages/UsersList';
 import {UsersRegister} from './components/pages/UsersRegister';
-import { Transfer } from './components/pages/Transfer';
+import {Transfer} from './components/pages/Transfer';
+import {TransferReport} from './components/pages/TransferReport';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ export type RootStackParamList = {
   UsersList: undefined;
   UsersRegister: undefined;
   Transfer: undefined;
+  TransferReport: undefined;
 };
 
 export type NavigationProps<T extends keyof RootStackParamList> =
@@ -35,6 +37,7 @@ const MainNavigation: React.FC = () => {
         <Screen name="UsersList" component={UsersList} />
         <Screen name="UsersRegister" component={UsersRegister} />
         <Screen name="Transfer" component={Transfer} />
+        <Screen name="TransferReport" component={TransferReport} />
       </Navigator>
     </NavigationContainer>
   );

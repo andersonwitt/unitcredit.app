@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,8 @@ import {useTheme} from '../hooks/useTheme';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from '../atoms/Button';
 import {TransferContext} from '../Providers/TransferProvider';
+import {UserSessionContext} from '../../../App';
+import {useUserService} from '../services/UserService';
 
 interface IStepProps {
   onBackPress: () => void;
@@ -43,9 +45,24 @@ export const currencyFormatter = (value: string) => {
 };
 
 const TransferTotalStep = (props: IStepProps) => {
+  const {token} = useContext(UserSessionContext);
   const {onBackPress, onConfirmPress} = props;
   const {colors} = useTheme();
   const {payload, setPayload} = useContext(TransferContext);
+  const {getUser} = useUserService();
+  const [balance, setBalance] = useState<number>(0);
+
+  const loadUser = useCallback(async () => {
+    const response = await getUser(token?.userId ?? '');
+
+    if (response?.balance) {
+      setBalance(response?.balance ?? 0);
+    }
+  }, [setBalance]);
+
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
 
   const handleChange = (text: string) => {
     setPayload?.({
@@ -75,7 +92,13 @@ const TransferTotalStep = (props: IStepProps) => {
           <Text style={{fontSize: 24}}>Qual o valor da transferencia?</Text>
         </View>
         <View>
-          <Text>Saldo disponível: R$ 0,00</Text>
+          <Text>
+            Saldo disponível:{' '}
+            {Intl.NumberFormat('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            }).format(balance)}
+          </Text>
         </View>
         <View style={styles.container}>
           <Text>Total</Text>
