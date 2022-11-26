@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableHighlight,
   View,
 } from 'react-native';
@@ -39,6 +40,17 @@ const TransferPersonStep = (props: IStepProps) => {
     setTo?.(user);
   };
 
+  const handleConfirm = () => {
+    if (!to?.id) {
+      ToastAndroid.show(
+        'Selecione um usuário para continuar!',
+        ToastAndroid.SHORT,
+      );
+      return;
+    }
+    onConfirmPress?.();
+  };
+
   return (
     <View
       style={{
@@ -66,7 +78,6 @@ const TransferPersonStep = (props: IStepProps) => {
           <Text>Favorecido</Text>
           <TextInput
             style={styles.input}
-            // value={total}
             placeholder="Digite o nome do favorecido"
             onChangeText={handleInputChanged}
           />
@@ -89,7 +100,7 @@ const TransferPersonStep = (props: IStepProps) => {
         </View>
       </View>
       <View>
-        <Button title="Avançar" onPress={onConfirmPress} />
+        <Button title="Avançar" onPress={handleConfirm} />
       </View>
     </View>
   );

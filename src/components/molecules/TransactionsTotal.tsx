@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 import {useTheme} from '../hooks/useTheme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -7,12 +13,14 @@ interface ITransactionsTotalProps {
   mt?: number;
   total: number;
   onClickRefresh: () => Promise<void>;
+  isLoading?: boolean;
 }
 
 const TransactionsTotal: React.FC<ITransactionsTotalProps> = ({
   mt = 15,
   total = 0,
   onClickRefresh,
+  isLoading,
 }) => {
   const {colors} = useTheme();
 
@@ -27,10 +35,15 @@ const TransactionsTotal: React.FC<ITransactionsTotalProps> = ({
       <View style={{display: 'flex', flexDirection: 'row'}}>
         <Text style={{fontSize: 18}}>| Saldo |</Text>
         <TouchableHighlight
+          disabled={isLoading}
           underlayColor={colors.contrast}
           style={{width: 24, borderRadius: 20, marginLeft: 15}}
           onPress={onClickRefresh}>
-          <Icon name="refresh" size={24} color={colors.text} />
+          {isLoading ? (
+            <ActivityIndicator size="small" color={colors.text} />
+          ) : (
+            <Icon name="refresh" size={24} color={colors.text} />
+          )}
         </TouchableHighlight>
       </View>
       <View>

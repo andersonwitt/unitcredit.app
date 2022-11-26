@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableHighlight,
   View,
 } from 'react-native';
@@ -71,6 +72,29 @@ const TransferTotalStep = (props: IStepProps) => {
     });
   };
 
+  const handleConfirm = () => {
+    if (
+      !payload?.totalAsString ||
+      (payload?.totalAsString &&
+        Number(
+          payload.totalAsString.replace(/[R$|.]/gi, '').replace(',', '.'),
+        ) <= 0)
+    ) {
+      ToastAndroid.show('Total inválido!', ToastAndroid.SHORT);
+      return;
+    }
+    if (
+      payload?.totalAsString &&
+      Number(payload.totalAsString.replace(/[R$|.]/gi, '').replace(',', '.')) >
+        balance
+    ) {
+      ToastAndroid.show('Saldo insuficiente!', ToastAndroid.SHORT);
+      return;
+    }
+
+    onConfirmPress?.();
+  };
+
   return (
     <View
       style={{
@@ -112,7 +136,7 @@ const TransferTotalStep = (props: IStepProps) => {
         </View>
       </View>
       <View>
-        <Button title="Avançar" onPress={onConfirmPress} />
+        <Button title="Avançar" onPress={handleConfirm} />
       </View>
     </View>
   );

@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableHighlight,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import {LoginNavigationContext} from '../pages/Login';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -19,6 +20,7 @@ type User = {
 
 const LoginForm: React.FC = () => {
   const {navigation} = useContext(LoginNavigationContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {setToken} = useContext(UserSessionContext);
   const {colors} = useTheme();
   const {signIn} = useUserService();
@@ -29,6 +31,7 @@ const LoginForm: React.FC = () => {
 
   const onPressLogin = async () => {
     try {
+      setIsLoading(true);
       const response = await signIn({
         userName: user.userName,
         password: user.password,
@@ -39,6 +42,8 @@ const LoginForm: React.FC = () => {
       }
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -78,12 +83,16 @@ const LoginForm: React.FC = () => {
         />
       </View>
       <View style={{width: '100%'}}>
-        <TouchableHighlight
-          onPress={onPressLogin}
-          style={{...styles.button, backgroundColor: colors.primary}}>
-          <Text style={{color: colors.secondary, textAlign: 'center'}}>
-            Entrar
-          </Text>
+        <TouchableHighlight disabled={isLoading} onPress={onPressLogin} underlayColor="transparent">
+          <View style={{...styles.button, backgroundColor: colors.primary}}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={{color: colors.secondary, textAlign: 'center'}}>
+                Entrar
+              </Text>
+            )}
+          </View>
         </TouchableHighlight>
       </View>
     </View>
@@ -111,6 +120,10 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 40,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
     padding: 10,
     borderRadius: 25,

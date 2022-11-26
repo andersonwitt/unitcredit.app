@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Text, TouchableHighlight, View} from 'react-native';
 import {Button} from '../atoms/Button';
 import {useTheme} from '../hooks/useTheme';
@@ -7,14 +7,23 @@ import {TransferContext} from '../Providers/TransferProvider';
 
 interface IStepProps {
   onBackPress: () => void;
-  onConfirmPress: () => void;
+  onConfirmPress: () => Promise<void>;
 }
 
 const TransferConfirmationStep = (props: IStepProps) => {
   const {onBackPress, onConfirmPress} = props;
   const {to, payload} = useContext(TransferContext);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {colors} = useTheme();
+
+  const handleConfirm = async () => {
+    try {
+      setIsLoading(true);
+      await onConfirmPress?.();
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <View
       style={{
@@ -37,7 +46,11 @@ const TransferConfirmationStep = (props: IStepProps) => {
         <Text style={{fontSize: 18}}>para {to?.name}</Text>
       </View>
       <View>
-        <Button title="Confirmar" onPress={onConfirmPress} />
+        <Button
+          title="Confirmar"
+          onPress={handleConfirm}
+          isLoading={isLoading}
+        />
       </View>
     </View>
   );

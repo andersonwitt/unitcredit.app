@@ -10,13 +10,22 @@ const HomeTemplate = () => {
   const {token} = useContext(UserSessionContext);
   const {getUser} = useUserService();
   const [balance, setBalance] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const loadUser = useCallback(async () => {
-    const response = await getUser(token?.userId ?? '');
+    setIsLoading(true);
+    const timeout = setTimeout(async () => {
+      try {
+        const response = await getUser(token?.userId ?? '');
 
-    if (response?.balance) {
-      setBalance(response?.balance ?? 0);
-    }
+        if (response?.balance) {
+          setBalance(response?.balance ?? 0);
+        }
+      } finally {
+        clearTimeout(timeout);
+        setIsLoading(false);
+      }
+    }, 1000);
   }, [setBalance]);
 
   useEffect(() => {
@@ -28,7 +37,12 @@ const HomeTemplate = () => {
       testID="home-template"
       style={{paddingHorizontal: 15, paddingVertical: 15}}>
       <UserInfo userName={token?.userName ?? ''} />
-      <TransactionsTotal mt={20} total={balance} onClickRefresh={loadUser} />
+      <TransactionsTotal
+        mt={20}
+        total={balance}
+        onClickRefresh={loadUser}
+        isLoading={isLoading}
+      />
       <MainMenuOptions type={EnumUserType.ADMIN} />
     </View>
   );
