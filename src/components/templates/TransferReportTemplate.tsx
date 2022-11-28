@@ -36,12 +36,11 @@ const TransferReportTemplate = () => {
     return {averageTotal, creditTotal, debitTotal};
   };
 
-  const getType = (type?: EnumTransactionType) => {
-    if (type === EnumTransactionType.CREDIT) return 'Credito';
-    if (type === EnumTransactionType.TRANSFER) return 'Débito';
-    if (type === EnumTransactionType.SALEORPAYMENT) return 'Venda';
-
-    return '';
+  const getType = (item?: Transaction) => {
+    if (item?.fromId === token?.userId) {
+      return 'Débito';
+    }
+    return 'Crédito';
   };
 
   useEffect(() => {
@@ -65,7 +64,7 @@ const TransferReportTemplate = () => {
       />
       <TransferReportList
         data={transactions.map(item => ({
-          title: getType(item.type),
+          title: getType(item),
           value: formatValue(item.total ?? 0),
         }))}
       />

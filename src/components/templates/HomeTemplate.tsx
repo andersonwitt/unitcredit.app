@@ -43,7 +43,7 @@ const HomeTemplate = () => {
         onClickRefresh={loadUser}
         isLoading={isLoading}
       />
-      <MainMenuOptions type={EnumUserType.ADMIN} />
+      <MainMenuOptions type={EnumUserType.TEACHER} />
     </View>
   );
 };
